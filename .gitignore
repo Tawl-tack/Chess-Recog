@@ -1,0 +1,7 @@
+Virtual_Environment/
+data/
+runs/
+models/
+*.pt
+*.pkl
+*.csv
