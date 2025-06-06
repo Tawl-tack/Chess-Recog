@@ -2,6 +2,7 @@ Virtual_Environment/
 data/
 runs/
 models/
+src/__pycache__/
 *.pt
 *.pkl
 *.csv
