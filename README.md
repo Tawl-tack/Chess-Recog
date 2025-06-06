@@ -36,16 +36,20 @@ Funcionalidade principal: ao clicar em "escanear", a extensão captura a tela, i
 
 * Organização das pastas finalizada.
 * Modelo retreinado localmente.
+  
 ![](img/trainImg.png)
 
 * Overfitting detectado após 20 epochs.
+  
 ![](img/trainImg2.png)
 
 * Testes em imagens reais funcionaram com fundo padrão.
 * Erros começaram com fundos menos previsíveis.
+  
 ![](img/beforeChessImg.jpg)
 
 * Solução: treinar com imagens em preto e branco para evitar dependência de cor.
+  
 ![](img/afterChessImg.jpg)
 
 ---
@@ -54,12 +58,15 @@ Funcionalidade principal: ao clicar em "escanear", a extensão captura a tela, i
 
 * Problema com cores resolvido.
 * Modelo agora funciona para tabuleiros de chess.com e lichess.
+  
 ![](img/lichesBoard.jpg)
 
 * Ainda falha com tabuleiros de livros.
+  
 ![](img/bookChessImg.jpg)
 
 * Testes com Histogram Equalization e Gaussian Blur não ajudaram.
+  
 ![](img/histogram_equalized.png) 
 ![](img/gaussian_blur.png)
 
