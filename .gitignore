@@ -1,8 +1,8 @@
-Virtual_Environment/
-data/
-runs/
-models/
-src/__pycache__/
+backend/venv/
+backend/data/
+backend/runs/
+#backend/models/
+backend/src/__pycache__/
 *.pt
 *.pkl
 *.csv

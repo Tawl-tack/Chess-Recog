@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from tkinter import Tk, filedialog
 from ultralytics import YOLO
+import os
 
 def pre_processing():
         root = Tk()
@@ -10,8 +11,6 @@ def pre_processing():
         title="Selecione a imagem de um Tabuleiro!",
         filetypes= [("imagens", "*.jpg *.jpeg .png")]
         )
-
-        # img_path = os.path.join(folder_path, arquivo) # Junta o nome do arquivo com o caminho dele
         img = cv2.imread(file_path)
         img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Converte a imagem para tons de cinza
         img_grey2 = cv2.cvtColor(img_grey, cv2.COLOR_GRAY2RGB) # Coloca ela no padrão RGB
@@ -21,11 +20,16 @@ def pre_processing():
 def matrix(result):
     boxes = result[0].boxes 
     A = np.zeros((8, 8))
+    board_x1 = board_y1 = board_x2 = board_y2 = None
 
     for box in boxes:
         if int(box.cls[0].item() == 7) and box.conf > 0.8:
             board_x1, board_y1, board_x2, board_y2 = box.xyxy[0].tolist() # Essa trecho é só para achar as coordenadas da borda do tabuleiro.
+    if None in [board_x1, board_y1, board_x2, board_y2]:
 
+        os.system('cls')
+
+        raise ValueError("O tabuleiro não foi reconhecido corretamente.")
     for box in boxes:
         if box.conf > 0.6:
             x1, y1, x2, y2 = box.xyxy[0].tolist()
@@ -40,7 +44,7 @@ def matrix(result):
                         if int(box.cls[0]) == 0:
                             A[index_y, index_x] = 13
                         else:  
-                            A[index_y, index_x] = int(box.cls[0].item())
+                            A[index_y, index_x] = int(box.cls[0].item())    
     return A
 
 def fen(A):
@@ -79,17 +83,27 @@ def fen(A):
 
     return fen
 
-
 def convert_to_fen():
     
     img = pre_processing()
-    model = YOLO(r"C:\dev\Chess-Vision-AI\runs\detect\train\weights\best.pt")
-    result = model(img, save=True, project="runs\detect")
+    model = YOLO(r"backend\models\model.pt")
+    
+    print("Digite 1 se quiser salvar ou 0 se não:")
+    yes_or_no = int(input())
+
+    if yes_or_no == 1:
+        result = model(img, save=True, project=r"backend\runs") # Tirar essa linha depois para não pesar o computador dos usuários.
+    else:
+        result = model(img) # Essa vai ser a linha que ficará
+
     A = matrix(result)
 
     FEN = fen(A)
     inv_FEN = fen(A[::-1])
     # https://lichess.org/editor/1kr1q3/pbpB4/1p3r2/4p2p/3nP1pN/2QP2P1/PPP4P/1KR2R2_w_-_-_0_1?color=white
+
+    os.system('cls') # Para limpar a tela antes de mandar
+
     print("FEN para jogador de branca: https://lichess.org/editor/"+ FEN + "_w_-_-_0_1?color=white")
     print("FEN para jogador de preta: https://lichess.org/editor/" + inv_FEN + "_w_-_-_0_1?color=white")
 
